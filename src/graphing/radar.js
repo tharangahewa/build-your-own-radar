@@ -443,7 +443,7 @@ const Radar = function (size, radar) {
     header.select('.radar-title')
       .append('div')
       .attr('class', 'radar-title__logo')
-      .html('<a href="https://www.thoughtworks.com"> <img src="/images/logo.png" /> </a>')
+      .html('<a href="https://cinglevue.com"><img src="/images/cv-logo.svg"></a>');
 
     buttonsGroup = header.append('div')
       .classed('buttons-group', true)
@@ -507,9 +507,8 @@ const Radar = function (size, radar) {
       .append('div')
       .attr('class', 'footer-content')
       .append('p')
-      .html('Powered by <a href="https://www.thoughtworks.com"> ThoughtWorks</a>. ' +
-      'By using this service you agree to <a href="https://www.thoughtworks.com/radar/tos">ThoughtWorks\' terms of use</a>. ' +
-      'You also agree to our <a href="https://www.thoughtworks.com/privacy-policy">privacy policy</a>, which describes how we will gather, use and protect any personal data contained in your public Google Sheet. ' +
+      .html('Inspired by <a href="https://www.thoughtworks.com"> ThoughtWorks</a>. ' +
+      '<span><a href="https://www.thoughtworks.com/radar/byor">Get started on building your radar</a></span>. ' +
       'This software is <a href="https://github.com/thoughtworks/build-your-own-radar">open source</a> and available for download and self-hosting.')
   }
 
@@ -585,7 +584,13 @@ const Radar = function (size, radar) {
   function constructSheetUrl (sheetName) {
     var noParamUrl = window.location.href.substring(0, window.location.href.indexOf(window.location.search))
     var queryParams = QueryParams(window.location.search.substring(1))
-    var sheetUrl = noParamUrl + '?sheetId=' + queryParams.sheetId + '&sheetName=' + encodeURIComponent(sheetName)
+    if(process.env.SHEET_URL){
+      var sheetUrl = noParamUrl + '?sheetName=' + encodeURIComponent(sheetName)
+    }
+    else{
+      var sheetUrl = noParamUrl + '?sheetId=' + queryParams.sheetId + '&sheetName=' + encodeURIComponent(sheetName) 
+    }
+    
     return sheetUrl
   }
 
@@ -594,7 +599,7 @@ const Radar = function (size, radar) {
       .append('div')
       .classed('multiple-sheet-button-group', true)
 
-    alternativeSheetButton.append('p').text('Choose a sheet to populate radar')
+    // alternativeSheetButton.append('p').text('Choose a sheet to populate radar')
     alternatives.forEach(function (alternative) {
       alternativeSheetButton
         .append('div:a')

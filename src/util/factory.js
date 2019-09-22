@@ -22,6 +22,7 @@ const ContentValidator = require('./contentValidator')
 const Sheet = require('./sheet')
 const ExceptionMessages = require('./exceptionMessages')
 const GoogleAuth = require('./googleAuth')
+const Configs = require('./configs')
 
 const plotRadar = function (title, blips, currentRadarName, alternativeRadars) {
   if (title.endsWith('.csv')) {
@@ -104,7 +105,7 @@ const GoogleSheet = function (sheetReference, sheetName) {
         var all = tabletop.sheets(sheetName).all()
         var blips = _.map(all, new InputSanitizer().sanitize)
 
-        plotRadar(tabletop.googleSheetName + ' - ' + sheetName, blips, sheetName, tabletop.foundSheetNames)
+        plotRadar( sheetName, blips, sheetName, tabletop.foundSheetNames)
       } catch (exception) {
         plotErrorMessage(exception)
       }
@@ -124,7 +125,7 @@ const GoogleSheet = function (sheetReference, sheetName) {
     const all = values
     const header = all.shift()
     var blips = _.map(all, blip => new InputSanitizer().sanitizeForProtectedSheet(blip, header))
-    plotRadar(documentTitle + ' - ' + sheetName, blips, sheetName, sheetNames)
+    plotRadar( sheetName, blips, sheetName, sheetNames)
   }
 
   self.authenticate = function (force = false, callback) {
@@ -205,15 +206,28 @@ const GoogleSheetInput = function () {
     var queryString = window.location.href.match(/sheetId(.*)/)
     var queryParams = queryString ? QueryParams(queryString[0]) : {}
 
-    if (domainName && queryParams.sheetId.endsWith('csv')) {
+    if (domainName && queryParams.sheetId && queryParams.sheetId.endsWith('csv')) {
+
       sheet = CSVDocument(queryParams.sheetId)
       sheet.init().build()
+
     } else if (domainName && domainName.endsWith('google.com') && queryParams.sheetId) {
+
       sheet = GoogleSheet(queryParams.sheetId, queryParams.sheetName)
       console.log(queryParams.sheetName)
+      sheet.init().build() 
 
-      sheet.init().build()
+    } else if (Configs.sheetUrl && Configs.tabUrl){
+      
+      console.log(queryParams.sheetName)
+      if((!queryParams.sheetName) && Configs.tabUrl ){
+        window.location.href = '/?sheetId=internal&sheetName=' + encodeURIComponent(Configs.tabUrl)
+      }
+
+      sheet = GoogleSheet( process.env.GSHEET_URL, queryParams.sheetName )
+      sheet.init().build() 
     } else {
+
       var content = d3.select('body')
         .append('div')
         .attr('class', 'input-sheet')
@@ -236,7 +250,7 @@ const GoogleSheetInput = function () {
 }
 
 function setDocumentTitle () {
-  document.title = 'Build your own Radar'
+  document.title = 'CingleVue Technology Radar'
 }
 
 function plotLoading (content) {
@@ -250,7 +264,7 @@ function plotLoading (content) {
 
   plotLogo(content)
 
-  var bannerText = '<h1>Building your radar...</h1><p>Your Technology Radar will be available in just a few seconds</p>'
+  var bannerText = '<h1>Building the radar...</h1><p>Cinglevue Technology Radar will be available in just a few seconds</p>'
   plotBanner(content, bannerText)
   plotFooter(content)
 }
@@ -258,7 +272,7 @@ function plotLoading (content) {
 function plotLogo (content) {
   content.append('div')
     .attr('class', 'input-sheet__logo')
-    .html('<a href="https://www.thoughtworks.com"><img src="/images/tw-logo.png" / ></a>')
+    .html('<a href="https://cinglevue.com"><img src="/images/cv-logo.svg"></a>');
 }
 
 function plotFooter (content) {
@@ -268,9 +282,8 @@ function plotFooter (content) {
     .append('div')
     .attr('class', 'footer-content')
     .append('p')
-    .html('Powered by <a href="https://www.thoughtworks.com"> ThoughtWorks</a>. ' +
-      'By using this service you agree to <a href="https://www.thoughtworks.com/radar/tos">ThoughtWorks\' terms of use</a>. ' +
-      'You also agree to our <a href="https://www.thoughtworks.com/privacy-policy">privacy policy</a>, which describes how we will gather, use and protect any personal data contained in your public Google Sheet. ' +
+    .html('Inspired by <a href="https://www.thoughtworks.com"> ThoughtWorks</a>. ' +
+      '<span><a href="https://www.thoughtworks.com/radar/byor">Get started on building your radar</a></span>. ' +
       'This software is <a href="https://github.com/thoughtworks/build-your-own-radar">open source</a> and available for download and self-hosting.')
 }
 

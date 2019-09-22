@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  tech-radar:
+    container_name: tech-radar
+    build:
+      context: .
+    image: docker-stack.j.cinglevue.com/tech-radar:latest

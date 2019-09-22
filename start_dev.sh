@@ -1,0 +1,1 @@
+GSHEET_DEFAULT_TAB="Technology Radar 2019" GSHEET_URL=https://docs.google.com/spreadsheets/d/1J_JQ-9ADQAsiniQnh9B5qjaQEwe_3mL_HpQatVakftU API_KEY=AIzaSyBgq7O7AqBFIWkRztygrOuXZJEIpxVAGUE CLIENT_ID=1067243526160-3hj0odnjhnefgs87pa4jdikrcp0b1frh.apps.googleusercontent.com 
