@@ -41,10 +41,10 @@ let plugins = [
     filename: 'error.html'
   }),
   new webpack.DefinePlugin({
-    'process.env.CLIENT_ID': JSON.stringify('1067243526160-3hj0odnjhnefgs87pa4jdikrcp0b1frh.apps.googleusercontent.com'),
-    'process.env.API_KEY': JSON.stringify('AIzaSyBgq7O7AqBFIWkRztygrOuXZJEIpxVAGUE'),
-    'process.env.GSHEET_DEFAULT_TAB': JSON.stringify('Technology Radar 2019'),
-    'process.env.GSHEET_URL': JSON.stringify('https://docs.google.com/spreadsheets/d/1J_JQ-9ADQAsiniQnh9B5qjaQEwe_3mL_HpQatVakftU')
+    'process.env.CLIENT_ID': JSON.stringify('Replace with actual CLIENT_ID'),
+    'process.env.API_KEY': JSON.stringify('Replace with actual API_KEY'),
+    'process.env.GSHEET_DEFAULT_TAB': JSON.stringify('Replace with actual GSHEET_DEFAULT_TAB'),
+    'process.env.GSHEET_URL': JSON.stringify('Replace with actual GSHEET_URL')
   })
 ]
 
